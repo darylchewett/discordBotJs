@@ -13,14 +13,18 @@ client.once(Events.ClientReady, c => {
 
 client.on('messageCreate', async message => {
 
+    const now = new Date();
+    const time = String(now.getHours()).padStart(2, '0') + ":" + String(now.getMinutes()).padStart(2, '0') + ":" + String(now.getSeconds()).padStart(2, '0');
+
+
     //Don't respond to self, or other bots (they wouldn't get it anyway)
     if(message.author.bot){
-        console.log("Bot message, ignoring...")
+        console.log(time + " | Bot message, ignoring...")
         return;
     }
 
     
-    console.log(`An actual person said something in ${message.channel.name}.`)
+    console.log(`${time} | An actual person said something in ${message.channel.name}.`)
 
     //Our array/lists for next set of checks
     let prefix = null;
