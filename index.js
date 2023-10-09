@@ -23,12 +23,25 @@ client.on('messageCreate', async message => {
     console.log(`An actual person said something in ${message.channel.name}.`)
 
     //Our array/lists for next set of checks
-    const sayHi = ["I'm ", "i'm ", "Im ", "I am ", "i am "].some((condition) => message.content.startsWith(condition));
-    const denyChannels = ["info", "backups"];
+    let prefix = null;
+    const targetPhrases = ["i'm ", "im ",  "i am "]
+    const denyChannels = ["info", "backups", "raid-guidelines", "event-archives", "raid-diplomacy"];
+    const messageLimit = 144;
    
 
+    for (let trigger of targetPhrases){
+
+
+        if(message.content.toLowerCase().trim().startsWith(trigger)){
+            prefix = trigger;
+            break;
+        }
+
+    }
+
+
     // If they didn't start the message right, give up now...
-    if (sayHi === false){
+    if (prefix === null){
         console.log("False Alarm, they didn't say it :(")
         return;
     }
@@ -46,7 +59,11 @@ client.on('messageCreate', async message => {
         //If uncaught will crash the whole bot
         try{
 
-            await message.reply("Hi " + message.content.substring( 4))
+    if (message.content.length > messageLimit)
+            await message.reply("Hi" + message.content.substring(prefix.length - 1, prefix.length + messageLimit ) + "...")
+
+    else
+            await message.reply("Hi" + message.content.substring(prefix.length - 1))
 
         }catch(e){
             //Sad times, but at least we can try again next time
